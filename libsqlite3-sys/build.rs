@@ -261,6 +261,30 @@ mod build_bundled {
                 cfg.file("sqlite3/wasm32-wasi-vfs.c");
             }
         }
+        if env::var("TARGET").map_or(false, |v| v == "wasm32-wasip1-threads") {
+            cfg.flag("-USQLITE_THREADSAFE")
+                .flag("-DSQLITE_THREADSAFE=0")
+                // https://github.com/rust-lang/rust/issues/74393
+                .flag("-DLONGDOUBLE_TYPE=double")
+                .flag("-D_WASI_EMULATED_MMAN")
+                .flag("-D_WASI_EMULATED_GETPID")
+                .flag("-mllvm")
+                .flag("-wasm-enable-sjlj")
+                .flag("-mtail-call")
+                .flag("-pthread")
+                .flag("-Xclang")
+                .flag("-target-feature")
+                .flag("-Xclang")
+                .flag("+atomics")
+                .flag("-Xclang")
+                .flag("-target-feature")
+                .flag("-Xclang")
+                .flag("+bulk-memory")
+                .flag("-Xclang")
+                .flag("-target-feature")
+                .flag("-Xclang")
+                .flag("+mutable-globals");
+        }
         if cfg!(feature = "unlock_notify") {
             cfg.flag("-DSQLITE_ENABLE_UNLOCK_NOTIFY");
         }
