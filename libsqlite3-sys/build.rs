@@ -263,7 +263,7 @@ mod build_bundled {
         }
         if env::var("TARGET").map_or(false, |v| v == "wasm32-wasip1-threads") {
             cfg.flag("-USQLITE_THREADSAFE")
-                .flag("-DSQLITE_THREADSAFE=0")
+                .flag("-DSQLITE_THREADSAFE=2")
                 // https://github.com/rust-lang/rust/issues/74393
                 .flag("-DLONGDOUBLE_TYPE=double")
                 .flag("-D_WASI_EMULATED_MMAN")
