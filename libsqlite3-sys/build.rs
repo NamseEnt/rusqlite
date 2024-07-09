@@ -233,7 +233,7 @@ mod build_bundled {
         // There may be other platforms that don't support `isnan`, they should be
         // tested for here.
         if is_compiler("msvc") {
-            use cc::windows_registry::{find_vs_version, VsVers};
+            use cc::windows_registry::find_vs_version;
             let vs_has_nan = find_vs_version().is_ok();
             if vs_has_nan {
                 cfg.flag("-DHAVE_ISNAN");
