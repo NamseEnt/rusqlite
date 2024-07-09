@@ -234,10 +234,7 @@ mod build_bundled {
         // tested for here.
         if is_compiler("msvc") {
             use cc::windows_registry::{find_vs_version, VsVers};
-            let vs_has_nan = match find_vs_version() {
-                Ok(ver) => ver != VsVers::Vs12,
-                Err(_msg) => false,
-            };
+            let vs_has_nan = find_vs_version().is_ok();
             if vs_has_nan {
                 cfg.flag("-DHAVE_ISNAN");
             }
