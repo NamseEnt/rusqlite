@@ -390,19 +390,10 @@ impl Drop for InnerConnection {
     }
 }
 
-#[cfg(not(any(target_arch = "wasm32", feature = "loadable_extension")))]
 static SQLITE_INIT: std::sync::Once = std::sync::Once::new();
 
 pub static BYPASS_SQLITE_INIT: AtomicBool = AtomicBool::new(false);
 
-// threading mode checks are not necessary (and do not work) on target
-// platforms that do not have threading (such as webassembly)
-#[cfg(target_arch = "wasm32")]
-fn ensure_safe_sqlite_threading_mode() -> Result<()> {
-    Ok(())
-}
-
-#[cfg(not(any(target_arch = "wasm32")))]
 fn ensure_safe_sqlite_threading_mode() -> Result<()> {
     // Ensure SQLite was compiled in threadsafe mode.
     if unsafe { ffi::sqlite3_threadsafe() == 0 } {
